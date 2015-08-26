@@ -171,7 +171,7 @@ static void *kASSizingQueueContext = &kASSizingQueueContext;
     }
 
     // insert elements
-    [self insertRowsAtIndexPaths:indexPaths withAnimationOption:animationOption];
+    [self insertRowsAtIndexPaths:indexPaths withAnimationOption:animationOption completion:nil];
 
   }];
 }
@@ -263,7 +263,7 @@ static void *kASSizingQueueContext = &kASSizingQueueContext;
   });
 }
 
-- (void)reloadSections:(NSIndexSet *)sections withAnimationOption:(ASDataControllerAnimationOptions)animationOption
+- (void)reloadSections:(NSIndexSet *)sections withAnimationOption:(ASDataControllerAnimationOptions)animationOption completion:(void (^)())completion
 {
   [self performDataFetchingWithBlock:^{
     // We need to keep data query on data source in the calling thread.
@@ -290,6 +290,10 @@ static void *kASSizingQueueContext = &kASSizingQueueContext;
 
       // reinsert the elements
       [self _batchInsertNodes:updatedNodes atIndexPaths:updatedIndexPaths withAnimationOptions:animationOption];
+        
+        if (completion) {
+            dispatch_async(dispatch_get_main_queue(), completion);
+        }
     });
   }];
 }
@@ -375,7 +379,7 @@ static void *kASSizingQueueContext = &kASSizingQueueContext;
   }
 }
 
-- (void)insertRowsAtIndexPaths:(NSArray *)indexPaths withAnimationOption:(ASDataControllerAnimationOptions)animationOption
+- (void)insertRowsAtIndexPaths:(NSArray *)indexPaths withAnimationOption:(ASDataControllerAnimationOptions)animationOption completion:(void (^)())completion
 {
   [self performDataFetchingWithBlock:^{
     // sort indexPath to avoid messing up the index when inserting in several batches
@@ -386,10 +390,14 @@ static void *kASSizingQueueContext = &kASSizingQueueContext;
     }
 
     [self _batchInsertNodes:nodes atIndexPaths:indexPaths withAnimationOptions:animationOption];
+      
+      if (completion) {
+          dispatch_async(dispatch_get_main_queue(), completion);
+      }
   }];
 }
 
-- (void)deleteRowsAtIndexPaths:(NSArray *)indexPaths withAnimationOption:(ASDataControllerAnimationOptions)animationOption
+- (void)deleteRowsAtIndexPaths:(NSArray *)indexPaths withAnimationOption:(ASDataControllerAnimationOptions)animationOption completion:(void (^)())completion
 {
   // sort indexPath in order to avoid messing up the index when deleting
   NSArray *sortedIndexPaths = [indexPaths sortedArrayUsingSelector:@selector(compare:)];
@@ -397,6 +405,10 @@ static void *kASSizingQueueContext = &kASSizingQueueContext;
   dispatch_async([ASDataController sizingQueue], ^{
     [self asyncUpdateDataWithBlock:^{
       DELETE_NODES(_nodes, sortedIndexPaths, animationOption);
+        
+        if (completion) {
+            dispatch_async(dispatch_get_main_queue(), completion);
+        }
     }];
   });
 }
@@ -455,7 +467,7 @@ static void *kASSizingQueueContext = &kASSizingQueueContext;
         [updatedNodes addObject:[_dataSource dataController:self nodeAtIndexPath:indexPath]];
       }
     }
-
+    
     dispatch_async([ASDataController sizingQueue], ^{
       [self syncUpdateDataWithBlock:^{
 

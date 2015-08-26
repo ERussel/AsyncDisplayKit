@@ -335,7 +335,11 @@ void ASPerformBlockWithoutAnimation(BOOL withoutAnimation, void (^block)()) {
 
 - (void)reloadSections:(NSIndexSet *)sections withRowAnimation:(UITableViewRowAnimation)animation
 {
-  [_dataController reloadSections:sections withAnimationOption:animation];
+    [self reloadSections:sections withRowAnimation:animation completion:nil];
+}
+
+- (void)reloadSections:(NSIndexSet *)sections withRowAnimation:(UITableViewRowAnimation)animation completion:(void (^)(void))completion{
+    [_dataController reloadSections:sections withAnimationOption:animation completion:completion];
 }
 
 - (void)moveSection:(NSInteger)section toSection:(NSInteger)newSection
@@ -345,12 +349,22 @@ void ASPerformBlockWithoutAnimation(BOOL withoutAnimation, void (^block)()) {
 
 - (void)insertRowsAtIndexPaths:(NSArray *)indexPaths withRowAnimation:(UITableViewRowAnimation)animation
 {
-  [_dataController insertRowsAtIndexPaths:indexPaths withAnimationOption:animation];
+    [self insertRowsAtIndexPaths:indexPaths withRowAnimation:animation completion:nil];
+}
+
+- (void)insertRowsAtIndexPaths:(NSArray *)indexPaths withRowAnimation:(UITableViewRowAnimation)animation completion:(void (^)(void))completion
+{
+    [_dataController insertRowsAtIndexPaths:indexPaths withAnimationOption:animation completion:completion];
 }
 
 - (void)deleteRowsAtIndexPaths:(NSArray *)indexPaths withRowAnimation:(UITableViewRowAnimation)animation
 {
-  [_dataController deleteRowsAtIndexPaths:indexPaths withAnimationOption:animation];
+    [self deleteRowsAtIndexPaths:indexPaths withRowAnimation:animation completion:nil];
+}
+
+- (void)deleteRowsAtIndexPaths:(NSArray *)indexPaths withRowAnimation:(UITableViewRowAnimation)animation completion:(void (^)())completion
+{
+    [_dataController deleteRowsAtIndexPaths:indexPaths withAnimationOption:animation completion:completion];
 }
 
 - (void)reloadRowsAtIndexPaths:(NSArray *)indexPaths withRowAnimation:(UITableViewRowAnimation)animation

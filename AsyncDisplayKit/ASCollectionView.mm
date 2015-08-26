@@ -296,7 +296,11 @@ static BOOL _isInterceptedSelector(SEL sel)
 
 - (void)reloadSections:(NSIndexSet *)sections
 {
-  [_dataController reloadSections:sections withAnimationOption:kASCollectionViewAnimationNone];
+    [self reloadSections:sections completion:nil];
+}
+
+- (void)reloadSections:(NSIndexSet *)sections completion:(void (^)())completion{
+    [_dataController reloadSections:sections withAnimationOption:kASCollectionViewAnimationNone completion:completion];
 }
 
 - (void)moveSection:(NSInteger)section toSection:(NSInteger)newSection
@@ -306,12 +310,22 @@ static BOOL _isInterceptedSelector(SEL sel)
 
 - (void)insertItemsAtIndexPaths:(NSArray *)indexPaths
 {
-  [_dataController insertRowsAtIndexPaths:indexPaths withAnimationOption:kASCollectionViewAnimationNone];
+    [self insertItemsAtIndexPaths:indexPaths completion:nil];
+}
+
+- (void)insertItemsAtIndexPaths:(NSArray *)indexPaths completion:(void (^)())completion
+{
+    [_dataController insertRowsAtIndexPaths:indexPaths withAnimationOption:kASCollectionViewAnimationNone completion:completion];
 }
 
 - (void)deleteItemsAtIndexPaths:(NSArray *)indexPaths
 {
-  [_dataController deleteRowsAtIndexPaths:indexPaths withAnimationOption:kASCollectionViewAnimationNone];
+    [self deleteItemsAtIndexPaths:indexPaths completion:nil];
+}
+
+- (void)deleteItemsAtIndexPaths:(NSArray *)indexPaths completion:(void (^)())completion
+{
+    [_dataController deleteRowsAtIndexPaths:indexPaths withAnimationOption:kASCollectionViewAnimationNone completion:completion];
 }
 
 - (void)reloadItemsAtIndexPaths:(NSArray *)indexPaths

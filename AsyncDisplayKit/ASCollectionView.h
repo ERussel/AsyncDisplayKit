@@ -95,6 +95,7 @@
 - (void)insertSections:(NSIndexSet *)sections;
 - (void)deleteSections:(NSIndexSet *)sections;
 - (void)reloadSections:(NSIndexSet *)sections;
+- (void)reloadSections:(NSIndexSet *)sections completion:(void (^)())completion;
 - (void)moveSection:(NSInteger)section toSection:(NSInteger)newSection;
 
 /**
@@ -104,7 +105,9 @@
  * view will be updated asynchronously. The asyncDataSource must be updated to reflect the changes before these methods are called.
  */
 - (void)insertItemsAtIndexPaths:(NSArray *)indexPaths;
+- (void)insertItemsAtIndexPaths:(NSArray *)indexPaths completion:(void (^)())completion;
 - (void)deleteItemsAtIndexPaths:(NSArray *)indexPaths;
+- (void)deleteItemsAtIndexPaths:(NSArray *)indexPaths completion:(void (^)())completion;
 - (void)reloadItemsAtIndexPaths:(NSArray *)indexPaths;
 - (void)moveItemAtIndexPath:(NSIndexPath *)indexPath toIndexPath:(NSIndexPath *)newIndexPath;
 
