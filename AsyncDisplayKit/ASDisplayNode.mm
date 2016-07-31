@@ -18,6 +18,7 @@
 #import "_ASScopeTimer.h"
 #import "ASDisplayNodeExtras.h"
 
+#if __IPHONE_OS_VERSION_MAX_ALLOWED >= 100000
 @interface ASDisplayNode () <UIGestureRecognizerDelegate, CALayerDelegate>
 
 /**
@@ -27,6 +28,17 @@
  */
 
 @end
+#else
+@interface ASDisplayNode () <UIGestureRecognizerDelegate>
+
+/**
+ *
+ * See ASDisplayNodeInternal.h for ivars
+ *
+ */
+
+@end
+#endif
 
 // Conditionally time these scopes to our debug ivars (only exist in debug/profile builds)
 #if TIME_DISPLAYNODE_OPS
